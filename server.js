@@ -47,3 +47,22 @@ app.use('/auth', authController);
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
 });
+
+// other require statements for libraries above
+const isSignedIn = require('./middleware/is-signed-in.js');
+const authController = require('./controllers/auth.js');
+const listingsController = require('./controllers/listings');
+const passUserToView = require('./middleware/pass-user-to-view.js');
+
+// . . .
+
+app.use('/auth', authController);
+// mount listings controller
+app.use('/listings', listingsController);
+app.use(passUserToView);
+
+app.get('/', (req, res) => {
+  res.render('index.ejs', {
+    user: req.session.user,
+  });
+});
